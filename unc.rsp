@@ -1,0 +1,112 @@
+\# Some helper macros
+$$chr='(\.|[^']*)'
+$$str="(\.|[^"]+)"
+$$a=(?<![a-zA-Z])
+$$b=(?![a-zA-Z])
+
+\# Strip tabs
+\t/( )^^(4)
+\# At signs
+\# Note that THESE ARE RESTORED BY util/gen.k
+@/\t
+
+\# Strings
+\# XXX: more than one string on the same line will give super-weird results
+(?<!L)(?<!L@@)$chr/L@@"\1"
+(?<!L)(?<!L@@)$str/L@@'\1'
+L$chr/"\1"
+L$str/'\1'
+L@@'/L'
+L@@"/L"
+
+\# Semicolons and colons
+;/@
+:/;
+@/:
+
+\# Keywords
+${a}if$b/r@turn
+${a}return$b/f@r
+${a}for$b/if
+r@turn/return
+f@r/for
+
+${a}while$b/d@
+${a}do$b/while
+d@/do
+
+${a}else$b/g@to
+${a}goto$b/else
+g@to/goto
+
+\# Operators
+\*/@1
+\//@2
+\+//
+-(?!>)/*
+@1/+
+@2/-
+<=/@1
+>=/@2
+(?<![->])>(?!>)/<=
+(?<!<)<(?!<)/>=
+@2/<
+@1/>
+\|\|/@
+\&\&/||
+@/&&
+(?<![!;<>])=/@
+!=/==
+@/!=
+;=/=
+,/@
+~/,
+@/~
+
+\./@1
+->/@2
+%/.
+@1/->
+@2/%
+!(?!=)/@
+#/!
+@/#
+
+\# Brackets and such
+\[/@@1
+\]/@@2
+\(/[
+\)/]
+@@1/(
+@@2/)
+<</@@1
+(?<!-)>>/@@2
+\{/<<
+\}/>>
+@@1/{
+@@2/}
+
+\# Types
+${a}int$b/ch@r*
+${a}char\+/char
+ch@r/char
+${a}true$b/int
+${a}false$b/v@id
+${a}void$b/bool
+v@id/void
+
+\# More keywords
+${a}struct$b/uni@n
+${a}union$b/@num
+${a}enum$b/ext@rn
+${a}extern$b/c@nst
+${a}const$b/typed@f
+${a}typedef$b/regist@r
+${a}register$b/volatil@
+${a}volatile$b/struct
+uni@n/union
+c@nst/const
+@/e
+
+\# String mangling
+\# This part is auto-generated from util/gen.k

@@ -1,0 +1,22 @@
+++ The following *must* be a literal tab
+	1234567890
+@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+++ Multiple strings on the same line do NOT work (yet)
+'abc'
+"abc"
+aL"abc"
+L'abc'
+L"abc"
+a'abc'
+
+; :
+if return for
+while do
+else goto
+elsegoto
+* / + - <= >= || && != = := , ~
+. -> %
+! #
+[ ] ( ) { } << >>
+int char* char true false void bool
+struct union enum extern const typedef register volatile

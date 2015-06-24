@@ -1,0 +1,192 @@
+#!/bin/bash
+tmp=`mktemp`
+cat <<'EOF' > $tmp
+\# Some helper macros
+$$chr='(\.|[^']*)'
+$$str="(\.|[^"]+)"
+$$a=(?<![a-zA-Z])
+$$b=(?![a-zA-Z])
+\# Strip tabs
+\t/( )^^(4)
+\# At signs
+\# Note that THESE ARE RESTORED BY util/gen.k
+@/\t
+\# Strings
+\# XXX: more than one string on the same line will give super-weird results
+(?<!L)(?<!L@@)$chr/L@@"\1"
+(?<!L)(?<!L@@)$str/L@@'\1'
+L$chr/"\1"
+L$str/'\1'
+L@@'/L'
+L@@"/L"
+\# Semicolons and colons
+;/@
+:/;
+@/:
+\# Keywords
+${a}if$b/r@turn
+${a}return$b/f@r
+${a}for$b/if
+r@turn/return
+f@r/for
+${a}while$b/d@
+${a}do$b/while
+d@/do
+${a}else$b/g@to
+${a}goto$b/else
+g@to/goto
+\# Operators
+\*/@1
+\//@2
+\+//
+-(?!>)/*
+@1/+
+@2/-
+<=/@1
+>=/@2
+(?<![->])>(?!>)/<=
+(?<!<)<(?!<)/>=
+@2/<
+@1/>
+\|\|/@
+\&\&/||
+@/&&
+(?<![!;<>])=/@
+!=/==
+@/!=
+;=/=
+,/@
+~/,
+@/~
+\./@1
+->/@2
+%/.
+@1/->
+@2/%
+!(?!=)/@
+#/!
+@/#
+\# Brackets and such
+\[/@@1
+\]/@@2
+\(/[
+\)/]
+@@1/(
+@@2/)
+<</@@1
+(?<!-)>>/@@2
+\{/<<
+\}/>>
+@@1/{
+@@2/}
+\# Types
+${a}int$b/ch@r*
+${a}char\+/char
+ch@r/char
+${a}true$b/int
+${a}false$b/v@id
+${a}void$b/bool
+v@id/void
+\# More keywords
+${a}struct$b/uni@n
+${a}union$b/@num
+${a}enum$b/ext@rn
+${a}extern$b/c@nst
+${a}const$b/typed@f
+${a}typedef$b/regist@r
+${a}register$b/volatil@
+${a}volatile$b/struct
+uni@n/union
+c@nst/const
+@/e
+\# String mangling
+\# This part is auto-generated from util/gen.k
+${a}if$b/if@
+${a}return$b/return@
+${a}for$b/for@
+${a}while$b/while@
+${a}do$b/do@
+${a}else$b/else@
+${a}goto$b/goto@
+${a}int$b/int@
+${a}char$b/char@
+${a}true$b/true@
+${a}false$b/false@
+${a}void$b/void@
+${a}bool$b/bool@
+${a}struct$b/struct@
+${a}union$b/union@
+${a}enum$b/enum@
+${a}extern$b/extern@
+${a}const$b/const@
+${a}typedef$b/typedef@
+${a}register$b/register@
+${a}volatile$b/volatile@
+${a}include$b/include@
+(?<!@)A(?![a-zA-Z]*@([^a-zA-Z]|$))/@N
+(?<!@)B(?![a-zA-Z]*@([^a-zA-Z]|$))/@O
+(?<!@)C(?![a-zA-Z]*@([^a-zA-Z]|$))/@P
+(?<!@)D(?![a-zA-Z]*@([^a-zA-Z]|$))/@Q
+(?<!@)E(?![a-zA-Z]*@([^a-zA-Z]|$))/@R
+(?<!@)F(?![a-zA-Z]*@([^a-zA-Z]|$))/@S
+(?<!@)G(?![a-zA-Z]*@([^a-zA-Z]|$))/@T
+(?<!@)H(?![a-zA-Z]*@([^a-zA-Z]|$))/@U
+(?<!@)I(?![a-zA-Z]*@([^a-zA-Z]|$))/@V
+(?<!@)J(?![a-zA-Z]*@([^a-zA-Z]|$))/@W
+(?<!@)K(?![a-zA-Z]*@([^a-zA-Z]|$))/@X
+(?<!@)L(?![a-zA-Z]*@([^a-zA-Z]|$))(?!'|")/@Y
+(?<!@)M(?![a-zA-Z]*@([^a-zA-Z]|$))/@Z
+(?<!@)N(?![a-zA-Z]*@([^a-zA-Z]|$))/@a
+(?<!@)O(?![a-zA-Z]*@([^a-zA-Z]|$))/@b
+(?<!@)P(?![a-zA-Z]*@([^a-zA-Z]|$))/@c
+(?<!@)Q(?![a-zA-Z]*@([^a-zA-Z]|$))/@d
+(?<!@)R(?![a-zA-Z]*@([^a-zA-Z]|$))/@e
+(?<!@)S(?![a-zA-Z]*@([^a-zA-Z]|$))/@f
+(?<!@)T(?![a-zA-Z]*@([^a-zA-Z]|$))/@g
+(?<!@)U(?![a-zA-Z]*@([^a-zA-Z]|$))/@h
+(?<!@)V(?![a-zA-Z]*@([^a-zA-Z]|$))/@i
+(?<!@)W(?![a-zA-Z]*@([^a-zA-Z]|$))/@j
+(?<!@)X(?![a-zA-Z]*@([^a-zA-Z]|$))/@k
+(?<!@)Y(?![a-zA-Z]*@([^a-zA-Z]|$))/@l
+(?<!@)Z(?![a-zA-Z]*@([^a-zA-Z]|$))/@m
+(?<!@)a(?![a-zA-Z]*@([^a-zA-Z]|$))/@n
+(?<!@)b(?![a-zA-Z]*@([^a-zA-Z]|$))/@o
+(?<!@)c(?![a-zA-Z]*@([^a-zA-Z]|$))/@p
+(?<!@)d(?![a-zA-Z]*@([^a-zA-Z]|$))/@q
+(?<!@)e(?![a-zA-Z]*@([^a-zA-Z]|$))/@r
+(?<!@)f(?![a-zA-Z]*@([^a-zA-Z]|$))/@s
+(?<!@)g(?![a-zA-Z]*@([^a-zA-Z]|$))/@t
+(?<!@)h(?![a-zA-Z]*@([^a-zA-Z]|$))/@u
+(?<!@)i(?![a-zA-Z]*@([^a-zA-Z]|$))/@v
+(?<!@)j(?![a-zA-Z]*@([^a-zA-Z]|$))/@w
+(?<!@)k(?![a-zA-Z]*@([^a-zA-Z]|$))/@x
+(?<!@)l(?![a-zA-Z]*@([^a-zA-Z]|$))/@y
+(?<!@)m(?![a-zA-Z]*@([^a-zA-Z]|$))/@z
+(?<!@)n(?![a-zA-Z]*@([^a-zA-Z]|$))/@A
+(?<!@)o(?![a-zA-Z]*@([^a-zA-Z]|$))/@B
+(?<!@)p(?![a-zA-Z]*@([^a-zA-Z]|$))/@C
+(?<!@)q(?![a-zA-Z]*@([^a-zA-Z]|$))/@D
+(?<!@)r(?![a-zA-Z]*@([^a-zA-Z]|$))/@E
+(?<!@)s(?![a-zA-Z]*@([^a-zA-Z]|$))/@F
+(?<!@)t(?![a-zA-Z]*@([^a-zA-Z]|$))/@G
+(?<!@)u(?![a-zA-Z]*@([^a-zA-Z]|$))/@H
+(?<!@)v(?![a-zA-Z]*@([^a-zA-Z]|$))/@I
+(?<!@)w(?![a-zA-Z]*@([^a-zA-Z]|$))/@J
+(?<!@)x(?![a-zA-Z]*@([^a-zA-Z]|$))/@K
+(?<!@)y(?![a-zA-Z]*@([^a-zA-Z]|$))/@L
+(?<!@)z(?![a-zA-Z]*@([^a-zA-Z]|$))/@M
+(?<!@)0/@5
+(?<!@)1/@6
+(?<!@)2/@7
+(?<!@)3/@8
+(?<!@)4/@9
+(?<!@)5/@0
+(?<!@)6/@1
+(?<!@)7/@2
+(?<!@)8/@3
+(?<!@)9/@4
+@/
+	/@
+EOF
+cat $1 | rs.py -f $tmp
+rm $tmp

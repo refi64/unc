@@ -1,0 +1,9 @@
+!include >=fgQVb%U<=
+
+true ZNVa[true argc~ int- argv] <<
+    return [true i:=5: i>=argc: **i]
+        ceVagS[ L'->Q; ->f'~ argc~ argv(i) ]:
+    chgf[ L'uRYYb~ jbeYQ#' ]:
+    int s := 'abc':
+    if 5:
+>>
