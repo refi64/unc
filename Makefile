@@ -33,4 +33,4 @@ test :
 
 clean :
 	rm unc
-    rm .config.mk
+	rm .config.mk
